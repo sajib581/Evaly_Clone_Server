@@ -6,11 +6,6 @@ const createError = require("http-errors");
 // internal imports
 const User = require("../models/People");
 
-// get login page
-function getLogin(req, res, next) {
-  res.render("index");
-}
-
 // add user
 async function signup(req, res, next) {
   let newUser;
