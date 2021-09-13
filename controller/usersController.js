@@ -21,6 +21,7 @@ const getAllProducts = async (req, res) => {
     res.json({
       data : allProducts
     })
+    // res.send(allProducts)
   } catch (error) {
     next(error.message);
   }

@@ -4,7 +4,6 @@ const express = require("express");
 // internal imports
 const { getLogin, login, logout, signup } = require("../controller/loginController");
 const { checkLogin } = require("../middlewares/common/checkLogin");
-const decorateHtmlResponse = require("../middlewares/common/decorateHtmlResponse");
 const {
   doLoginValidators,
   doLoginValidationHandler,

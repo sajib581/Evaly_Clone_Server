@@ -35,6 +35,7 @@ async function signup(req, res, next) {
 
 // do login
 async function login(req, res, next) {
+  
   try {
     // find a user who has this email/username
     const user = await User.findOne({
@@ -48,6 +49,7 @@ async function login(req, res, next) {
       );
 
       if (isValidPassword) {
+        console.log("Hitted");
         // prepare the user object to generate token
         const userObject = {
           userId: user._id,
@@ -62,14 +64,12 @@ async function login(req, res, next) {
         const token = jwt.sign(userObject, process.env.JWT_SECRET, {
           expiresIn: process.env.JWT_EXPIRY,
         });
-
-        // set cookie
+             // // set cookie
         res.cookie(process.env.COOKIE_NAME, token, {
           maxAge: process.env.JWT_EXPIRY,
           httpOnly: true,
           signed: true,
         });
-
         res.send(true);
       } else {
         throw createError("Login failed! Please try again.");
@@ -96,7 +96,6 @@ function logout(req, res) {
 
 module.exports = {
   signup,
-  getLogin,
   login,
   logout,
 };
