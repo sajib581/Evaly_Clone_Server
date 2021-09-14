@@ -35,7 +35,6 @@ async function signup(req, res, next) {
 
 // do login
 async function login(req, res, next) {
-  
   try {
     // find a user who has this email/username
     const user = await User.findOne({
@@ -65,12 +64,18 @@ async function login(req, res, next) {
           expiresIn: process.env.JWT_EXPIRY,
         });
              // // set cookie
-        res.cookie(process.env.COOKIE_NAME, token, {
+        res.cookie("panda-commerce", token, {
           maxAge: process.env.JWT_EXPIRY,
+          expires : new Date(Date.now() + 555565656565)  ,
           httpOnly: true,
           signed: true,
         });
-        res.send(true);
+        
+        res.status(200).json({
+          result : true,
+          jsonWebToken : token
+        });
+
       } else {
         throw createError("Login failed! Please try again.");
       }
@@ -94,8 +99,19 @@ function logout(req, res) {
   res.send("logged out");
 }
 
+function isAdmin(req, res, next) {
+  const token = req.params.jwtToken ;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  if(decoded.role === "admin"){
+    res.send(true);
+  }else{
+    res.send(false);
+  }
+}
+
 module.exports = {
   signup,
   login,
   logout,
+  isAdmin
 };

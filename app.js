@@ -30,7 +30,7 @@ const {
 const app = express();
 dotenv.config();
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 5000
 // database connection
 mongoose
   .connect(process.env.MONGO_CONNECTION_STRING, {
@@ -47,13 +47,10 @@ mongoose
 // request parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors())
+// app.use(cors())
 app.use(fileUpload({
   useTempFiles: true   //it must be used
 }))
-
-
-// app.use(express.static(path.join(__dirname, "public")));
 
 // parse cookies
 app.use(cookieParser(process.env.COOKIE_SECRET));

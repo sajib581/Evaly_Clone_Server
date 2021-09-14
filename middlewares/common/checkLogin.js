@@ -6,7 +6,7 @@ const checkLogin = (req, res, next) => {
 
   if (cookies) {
     try {
-      token = cookies[process.env.COOKIE_NAME];
+      token = cookies["panda-commerce"];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = decoded;
       next();
