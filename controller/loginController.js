@@ -73,7 +73,8 @@ async function login(req, res, next) {
         
         res.status(200).json({
           result : true,
-          jsonWebToken : token
+          jsonWebToken : token,
+          userData : userObject
         });
 
       } else {
@@ -93,12 +94,29 @@ async function login(req, res, next) {
   }
 }
 
-// do logout
-function logout(req, res) {
-  res.clearCookie(process.env.COOKIE_NAME);
-  res.send("logged out");
-}
 
+const isLogin = (req, res, next) => {
+  const token = req.params.jwtToken ;
+
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      res.status(200).json({
+        userData : decoded
+      });
+    } catch (err) {
+      res.status(403).json({
+        error: "Authetication failure!",
+      });
+    }
+  } else {
+    res.status(403).json({
+      error: "Authetication failure!",
+    });
+  }
+};
+
+// Check either admin or not 
 function isAdmin(req, res, next) {
   const token = req.params.jwtToken ;
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -109,9 +127,16 @@ function isAdmin(req, res, next) {
   }
 }
 
+// do logout
+function logout(req, res) {
+  res.clearCookie(process.env.COOKIE_NAME);
+  res.send("logged out");
+}
+
 module.exports = {
   signup,
   login,
   logout,
-  isAdmin
+  isAdmin,
+  isLogin
 };

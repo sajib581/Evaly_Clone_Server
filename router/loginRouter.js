@@ -2,7 +2,7 @@
 const express = require("express");
 
 // internal imports
-const { getLogin, login, logout, signup } = require("../controller/loginController");
+const { getLogin, login, logout, signup, isLogin } = require("../controller/loginController");
 const { checkLogin } = require("../middlewares/common/checkLogin");
 const {
   doLoginValidators,
@@ -24,6 +24,8 @@ router.post(
 );
 
 router.post('/signup', signup )
+
+router.get('/isLoggedIn/:jwtToken', isLogin )
 
 // logout
 router.delete(

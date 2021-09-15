@@ -1,6 +1,6 @@
 // external imports
 const express = require("express");
-const { isAdmin } = require("../controller/loginController");
+const { isAdmin, isLogin } = require("../controller/loginController");
 
 // internal imports
 const {
@@ -12,5 +12,6 @@ const router = express.Router();
 router.get('/allProduct', getAllProducts )
 
 router.get('/isAdmin/:jwtToken', isAdmin)
+
 
 module.exports = router;
