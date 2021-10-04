@@ -1,21 +1,25 @@
 const Product = require("../models/Product");
 
 const addProduct = async (req, res, next) => {
-  let newProduct;
-  let = req.files.image;
+  let newProduct ;
+  let image = req.files.file;
+  let productObject = JSON.parse(req.body.productInfo)
+
   if (image) {
-    cloudinary.uploader.upload(file.tempFilePath, async function (error, result) {
+    cloudinary.uploader.upload(image.tempFilePath, async function (error, result) {
       if (!error) {
         newProduct = new Product({
-          ...req.body,
-          addedBy: {
-            id: req.user.userId,
-            name: req.user.username,
-            avatar: req.user.avatar,
-          },
+          ...productObject,
           image: result.url,
+          addedBy : {
+            id : req.userId,
+            name : req.username,
+            email : req.email
+          }
         });
-
+        
+        console.log(newProduct);
+      
         // save product in database
         try {
           const result = await newProduct.save();
@@ -26,7 +30,7 @@ const addProduct = async (req, res, next) => {
           res.status(500).json({
             errors: {
               common: {
-                msg: "Unknown error occured!",
+                msg: error.message ,
               },
             },
           });
@@ -34,9 +38,12 @@ const addProduct = async (req, res, next) => {
       }else {
         next("image upload problem")
       }
+
     });
   }
   else{
+    console.log("222222222222");
+    console.log("Cloudinary error : ",error);
     next('Image must be included');
   }
 };

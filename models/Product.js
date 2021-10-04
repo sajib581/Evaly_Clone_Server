@@ -5,11 +5,17 @@ const productSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  description: [
+  short_description: [
     {
-      type: String,
+      type: Object,
       required: true,
-    },
+    }
+  ],
+  details: [
+    {
+      type: Object,
+      required: true,
+    }
   ],
   image: {
     type: String,
@@ -27,8 +33,9 @@ const productSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  rating: {
+  star: {
     type: String,
+    default: 0,
   },
   review: [
     {
@@ -40,10 +47,16 @@ const productSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  discount: {
+    type: String,
+    required: true,
+  },
   addedBy: {
+    type: Object,
     id: mongoose.Types.ObjectId,
     name: String,
-    avatar: String,
+    email : String,
+    // required: true
   },
 }, {
     timestamps : true,

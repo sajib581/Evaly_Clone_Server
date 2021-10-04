@@ -3,18 +3,20 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const path = require("path");
-const cors = require('cors')
+const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const fileUpload = require('express-fileupload');
-const cloudinary = require('cloudinary').v2;
+const fileUpload = require("express-fileupload");
+const cloudinary = require("cloudinary").v2;
+
+dotenv.config();
 
 //cloudinary configuration
 cloudinary.config({
-  cloud_name: 'dy3odhvvh',
+  cloud_name: "dy3odhvvh",
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET_KEY
+  api_secret: process.env.CLOUDINARY_SECRET_KEY,
 });
-global.cloudinary = cloudinary
+global.cloudinary = cloudinary;
 
 //internal imports
 const loginRouter = require("./router/loginRouter");
@@ -28,9 +30,9 @@ const {
 } = require("./middlewares/common/errorHandler");
 
 const app = express();
-dotenv.config();
 
-const PORT = process.env.PORT || 5000
+
+const PORT = process.env.PORT || 5000;
 // database connection
 mongoose
   .connect(process.env.MONGO_CONNECTION_STRING, {
@@ -40,14 +42,10 @@ mongoose
   .then(() => console.log("database connection successful!"))
   .catch((err) => console.log(err));
 
-  app.use(cors({
-    origin:["http://localhost:3000"],
-    credentials: true
-    }))
 // request parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(cors())
+app.use(cors());
 app.use(fileUpload({
   useTempFiles: true   //it must be used
 }))

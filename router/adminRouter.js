@@ -3,10 +3,10 @@ const express = require("express");
 const { addProduct } = require("../controller/adminController");
 const { checkLogin, requireRole } = require("../middlewares/common/checkLogin");
 
-// internal imports
+// internal imports 
 
 const router = express.Router();
 
-router.post('/addProduct', checkLogin , requireRole(["admin"]),   addProduct )
+router.post('/addProduct/:jwtToken', checkLogin , requireRole(["admin"]),   addProduct )
 
 module.exports = router;

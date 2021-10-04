@@ -8,6 +8,7 @@ const User = require("../models/People");
 
 // add user
 async function signup(req, res, next) {
+  
   let newUser;
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
@@ -22,6 +23,7 @@ async function signup(req, res, next) {
     res.status(200).json({
       message: "User was added successfully!",
     });
+    
   } catch (err) {
     res.status(500).json({
       errors: {
@@ -55,7 +57,7 @@ async function login(req, res, next) {
           username: user.name,
           mobile: user.mobile,
           email: user.email,
-          avatar : user.avatar,
+          avatar: user.avatar,
           role: user.role || "user",
         };
 
@@ -63,20 +65,20 @@ async function login(req, res, next) {
         const token = jwt.sign(userObject, process.env.JWT_SECRET, {
           expiresIn: process.env.JWT_EXPIRY,
         });
-             // // set cookie
+
+        // // set cookie
         res.cookie("panda-commerce", token, {
           maxAge: process.env.JWT_EXPIRY,
-          expires : new Date(Date.now() + 555565656565)  ,
+          expires: new Date(Date.now() + 555565656565),
           httpOnly: true,
           signed: true,
         });
-        
-        res.status(200).json({
-          result : true,
-          jsonWebToken : token,
-          userData : userObject
-        });
 
+        res.status(200).json({
+          result: true,
+          jsonWebToken: token,
+          userData: userObject,
+        });
       } else {
         throw createError("Login failed! Please try again.");
       }
@@ -89,20 +91,19 @@ async function login(req, res, next) {
         common: {
           msg: err.message,
         },
-      }
+      },
     });
   }
 }
 
-
 const isLogin = (req, res, next) => {
-  const token = req.params.jwtToken ;
+  const token = req.params.jwtToken;
 
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       res.status(200).json({
-        userData : decoded
+        userData: decoded,
       });
     } catch (err) {
       res.status(403).json({
@@ -116,13 +117,13 @@ const isLogin = (req, res, next) => {
   }
 };
 
-// Check either admin or not 
+// Check either admin or not
 function isAdmin(req, res, next) {
-  const token = req.params.jwtToken ;
+  const token = req.params.jwtToken;
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  if(decoded.role === "admin"){
+  if (decoded.role === "admin") {
     res.send(true);
-  }else{
+  } else {
     res.send(false);
   }
 }
@@ -138,5 +139,5 @@ module.exports = {
   login,
   logout,
   isAdmin,
-  isLogin
+  isLogin,
 };

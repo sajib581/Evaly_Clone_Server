@@ -11,7 +11,9 @@ function errorHandler(err, req, res, next) {
   
   res.status(err.status || 500);
   // json response
-  res.json(errorData);
+  res.json({
+    errors : errorData
+  });
 }
 
 module.exports = {
